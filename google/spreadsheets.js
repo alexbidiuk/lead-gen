@@ -27,8 +27,6 @@ const writeResults = (auth, dataToWrite) => {
     if (err) {
       // Handle error.
       console.log(err);
-    } else {
-      console.log(`${result.updates.updatedCells} cells appended.`);
     }
   });
 };
