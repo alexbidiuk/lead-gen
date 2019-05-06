@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start ecosystem.config.js --env production",
+    "start": "pm2 start --no-daemon ecosystem.config.js --env production",
     "bot:dev": "pm2 start ecosystem.config.js --env development"
   },
   "author": "",
