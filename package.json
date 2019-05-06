@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.4",
     "googleapis": "^39.2.0",
     "lodash": "^4.17.11",
     "node-telegram-bot-api": "^0.30.0",

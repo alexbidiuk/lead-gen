@@ -1,8 +1,3 @@
-const Promise = require('bluebird');
-Promise.config({
-  cancellation: true
-});
-
 const TelegramBot = require('node-telegram-bot-api');
 const questions = require('./questions');
 const users = require('./users');
