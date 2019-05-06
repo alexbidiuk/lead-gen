@@ -131,7 +131,7 @@ const startBot = () => {
   bot.on('callback_query', function (msg) {
     let chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
     let answer = msg.data.split('_');
-    if (!users[userId]) {
+    if (!users[chatId]) {
       let text = "Извините, во время работы бота пошло что-то не так и мы потеряли Ваши данные, пройдите тест еще раз, спасибо."
       bot.sendMessage(userId, text);
       return;
