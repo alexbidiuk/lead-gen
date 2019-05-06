@@ -133,7 +133,7 @@ const startBot = () => {
     let answer = msg.data.split('_');
     if (!users[chatId]) {
       let text = "Извините, во время работы бота пошло что-то не так и мы потеряли Ваши данные, пройдите тест еще раз, спасибо."
-      bot.sendMessage(userId, text);
+      bot.sendMessage(chatId, text);
       return;
     }
     let questionIdx = users[chatId].currQuestionIdx;
