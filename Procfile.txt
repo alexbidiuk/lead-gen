@@ -1,1 +1,1 @@
-web: npm run bot:prod
+worker: npm start
