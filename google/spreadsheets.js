@@ -1,7 +1,7 @@
 const {google} = require('googleapis');
 const authorize = require('./auth');
 
-const spreadsheetId = '1NSsWPVxsKMfesQAsGnfzeg9hWRL83GBj6NeYfeUt3Vg';
+const spreadsheetId = '1lgqMucAxn48HSYiIrFvdlKW3kEAigOnKl4U0gV8zw2M';
 const range = 'Лист1';
 const valueInputOption = 'RAW';
 
