@@ -16,6 +16,17 @@ const startBot = () => {
     console.log(error);  // => 'EFATAL'
   });
 
+  const isOpenFieldValid = (field, value) => {
+    switch (field) {
+      case 'name':
+        return /^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$/.test(value);
+      case 'city':
+        return /^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$/.test(value);
+      case 'phone':
+        return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/.test(value);
+    }
+  };
+
   const calculateTotal = (userId) => {
     return users[userId].answers.reduce((total, mark) => {
      if (mark === null) return total;
@@ -42,7 +53,7 @@ const startBot = () => {
         "Для этого приглашаем вас на онлайн-встречу по маркетингу, где вы сможете прокачать маркетинговые скиллы полного цикла:\n" +
         "Тестирование спроса/Запуск Воронки продаж/Трафик и масштабирование.\n" +
         "Кликайте по кнопке ниже, чтобы узнать детали встречи и забронировать участие.\n\n" +
-        "[Иду на онлайн-встречу](http://www.example.com/)"
+        "[Иду на онлайн-встречу](https://bit.ly/300EO1f)"
     } else if (50 <= total && total <= 69) {
       text = "Неплохой результат.\n" +
         "За такие знания готовы платить на начальном уровне. Шанс найти работу или заказчика есть, но все еще низок.\n" +
@@ -50,7 +61,7 @@ const startBot = () => {
         "Нужно больше внимания уделить профнавыкам. Для этого приглашаем вас на онлайн-встречу по маркетингу, где вы сможете прокачать маркетинговые скиллы полного цикла:\n" +
         "Тестирование спроса/Запуск Воронки продаж/Трафик и масштабирование.\n" +
         "Кликайте по кнопке ниже, чтобы узнать детали встречи и забронировать участие.\n\n" +
-        "[Иду на онлайн-встречу](http://www.example.com/)"
+        "[Иду на онлайн-встречу](https://bit.ly/300EO1f)"
     } else if (70 <= total && total <= 80) {
       text = "Хороший результат, и вы можете лучше!\n" +
         "За ваши знания и навыки готовы платить хорошие деньги. Но это вряд ли вас устраивает.\n" +
@@ -60,7 +71,7 @@ const startBot = () => {
         "Поэтому мы приглашаем вас на онлайн-встречу по маркетингу, где сможете прокачать маркетинговые скиллы полного цикла:\n" +
         "Тестирование спроса/Запуск Воронки продаж/Трафик и масштабирование.\n" +
         "Кликайте по кнопке ниже, чтобы узнать детали встречи и забронировать участие.\n\n" +
-        "[Иду на онлайн-встречу](http://www.example.com/)"
+        "[Иду на онлайн-встречу](tg://resolve?domain=Leadgenstudio)"
     } else if (81 <= total && total <= 100) {
       text = "Вау!\n" +
         "Ваш уровень навыков высок.\n" +
@@ -68,7 +79,7 @@ const startBot = () => {
         "Хотите реально проверить себя на прочность? Предлагаем сделать короткое тестовое задание по настройке таргета в FB.\n" +
         "Лучшего ждет сюрприз - возможность пройти стажировку на 1 неделю в команде профессионалов.\n" +
         "Мы поделимся своими наработками, а вы прокачаете свои скиллы. Интересно?\n\n" +
-        "Тогда жмите на кнопку [Тест на прочность!](http://www.example.com/)"
+        "[Тогда жмите на кнопку!](tg://resolve?domain=Leadgenstudio)"
     }
     bot.sendMessage(userId, text, {parse_mode: 'markdown'});
     delete users[userId];
@@ -100,7 +111,7 @@ const startBot = () => {
         })
       };
     }
-    bot.sendMessage(chatId, text, options).then(() => {})
+    bot.sendMessage(chatId, text, options);
   }
 
 
@@ -115,15 +126,22 @@ const startBot = () => {
   });
 
   bot.on('message', function (msg, match) {
-    if (msg.entities) return;
+    if (msg.entities && msg.entities.filter(entity => entity.type === 'bot_command').length > 0) return;
     let chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
     if (users[chatId]) {
       let currQuestionIdx = users[chatId].currQuestionIdx;
       const currQuestion = questions[currQuestionIdx];
       if (currQuestion.type === 'open') {
-        users[chatId].meta[currQuestion.userField] = msg.text;
-        currQuestionIdx++;
-        sendQuestion(currQuestionIdx, msg);
+        if(isOpenFieldValid(currQuestion.userField, msg.text)) {
+          users[chatId].meta[currQuestion.userField] = msg.text;
+          currQuestionIdx++;
+          sendQuestion(currQuestionIdx, msg);
+        } else {
+          let text = "Вы ввели некорректные данные. Попробуйте еще раз.";
+          bot.sendMessage(chatId, text).then(() => {
+            sendQuestion(currQuestionIdx, msg);
+          })
+        }
       }
     }
   });
