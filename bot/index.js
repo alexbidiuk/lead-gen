@@ -19,9 +19,9 @@ const startBot = () => {
   const isOpenFieldValid = (field, value) => {
     switch (field) {
       case 'name':
-        return /^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$/.test(value);
+        return /^[a-zA-Zа-яА-ЯёЁіїІЇ'][a-zA-Z-а-яА-ЯёЁіїІЇ' ]+[a-zA-Zа-яА-ЯёЁіїІЇ']?$/.test(value);
       case 'city':
-        return /^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$/.test(value);
+        return /^[a-zA-Zа-яА-ЯёЁіїІЇ'][a-zA-Z-а-яА-ЯёЁіїІЇ' ]+[a-zA-Zа-яА-ЯёЁіїІЇ']?$/.test(value);
       case 'phone':
         return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/.test(value);
     }
