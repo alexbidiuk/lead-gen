@@ -9,11 +9,10 @@ const startBot = () => {
   initConfig();
 
   const token = global.gConfig.telegramBotToken;
-
   const bot = new TelegramBot(token, {polling: true});
 
   bot.on('polling_error', (error) => {
-    console.log(error);  // => 'EFATAL'
+    console.log(error);
   });
 
   const isOpenFieldValid = (field, value) => {
@@ -23,7 +22,7 @@ const startBot = () => {
       case 'city':
         return /^[a-zA-Zа-яА-ЯёЁіїІЇ'][a-zA-Z-а-яА-ЯёЁіїІЇ' ]+[a-zA-Zа-яА-ЯёЁіїІЇ']?$/.test(value);
       case 'phone':
-        return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/.test(value);
+        return /^\+?3?8?(0\d{9})$/.test(value);
     }
   };
 
@@ -34,16 +33,36 @@ const startBot = () => {
     }, 0);
   };
 
+  const removeKeyboard = (chatId, messageId, messageText) => {
+    bot.editMessageText(
+      messageText + '\n' + '',
+      {
+        message_id: messageId,
+        chat_id: chatId,
+        reply_markup: {
+          inline_keyboard: []
+        },
+      })
+  };
 
   const endTesting = (userId) => {
+    users[userId].endTime = new Date().toUTCString();
     const total = calculateTotal(userId);
     const dataToWrite = {
       name: users[userId].meta.name,
       city: users[userId].meta.city,
       phone: users[userId].meta.phone,
-      mark: total
+      mark: total,
+      startTime: users[userId].startTime,
+      endTime: users[userId].endTime,
     };
+    const text = getFinalText(total);
     startGoogleWriteProcess(dataToWrite);
+    bot.sendMessage(userId, text, {parse_mode: 'markdown'});
+    delete users[userId];
+  };
+
+  const getFinalText = (total) => {
     let text;
     if (0 <= total && total <= 49) {
       text = "Все плохо.\n" +
@@ -81,10 +100,8 @@ const startBot = () => {
         "Мы поделимся своими наработками, а вы прокачаете свои скиллы. Интересно?\n\n" +
         "[Тогда жмите на кнопку!](tg://resolve?domain=Leadgenstudio)"
     }
-    bot.sendMessage(userId, text, {parse_mode: 'markdown'});
-    delete users[userId];
+    return text;
   };
-
 
   const setUserQuestionAnswerWeight = (userId, questionIdx, questionAnswerWeight) => {
     if (!users[userId]) {
@@ -121,6 +138,7 @@ const startBot = () => {
     users[chatId] = {
       answers: [],
       meta: {},
+      startTime: new Date().toUTCString()
     };
     sendQuestion(0, msg);
   });
@@ -149,6 +167,8 @@ const startBot = () => {
 
   bot.on('callback_query', function (msg) {
     let chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
+    const messageId = msg.message.message_id;
+    const messageText = msg.message.text;
     let answer = msg.data.split('_');
     if (!users[chatId]) {
       let text = "Извините, во время работы бота пошло что-то не так и мы потеряли Ваши данные, пройдите тест еще раз, спасибо."
@@ -156,16 +176,17 @@ const startBot = () => {
       return;
     }
     let questionIdx = users[chatId].currQuestionIdx;
-    let userAnswerWeight = answer[1];
-
-    setUserQuestionAnswerWeight(chatId, questionIdx, userAnswerWeight);
+    let question = questions[questionIdx];
+    if (!question.ignore) {
+      let userAnswerWeight = answer[1];
+      setUserQuestionAnswerWeight(chatId, questionIdx, userAnswerWeight);
+    }
     questionIdx++;
-
-    if (questions.length === questionIdx) {
+    removeKeyboard(chatId, messageId, messageText);
+    if (5 === questionIdx) {
       endTesting(chatId);
       return;
     }
-
 
     sendQuestion(questionIdx, msg);
   });

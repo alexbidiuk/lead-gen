@@ -6,7 +6,9 @@ const users = {
       'city': 'city',
     },
     'currQuestionIdx': 'currQuestionIdx',
-    'answers': ['answer 1']
+    'answers': ['answer 1'],
+    'startTime': 'startTime',
+    'endTime': 'endTime',
   }
 };
 
