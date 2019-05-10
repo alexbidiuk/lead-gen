@@ -33,9 +33,9 @@ const startBot = () => {
     }, 0);
   };
 
-  const removeKeyboard = (chatId, messageId, messageText) => {
+  const removeKeyboard = (chatId, messageId, messageText, userAnswer) => {
     bot.editMessageText(
-      messageText + '\n' + '',
+      messageText + (userAnswer ? ('\n \n' + 'Вы выбрали: ' + userAnswer) : ''),
       {
         message_id: messageId,
         chat_id: chatId,
@@ -124,7 +124,9 @@ const startBot = () => {
       options = {
         reply_markup: JSON.stringify({
           inline_keyboard: questionVars,
-          parse_mode: 'Markdown'
+          parse_mode: 'Markdown',
+          one_time_keyboard: true,
+          resize_keyboard: true,
         })
       };
     }
@@ -182,8 +184,8 @@ const startBot = () => {
       setUserQuestionAnswerWeight(chatId, questionIdx, userAnswerWeight);
     }
     questionIdx++;
-    removeKeyboard(chatId, messageId, messageText);
-    if (5 === questionIdx) {
+    removeKeyboard(chatId, messageId, messageText, question.ignore ? null : answer[0]);
+    if (questions.length === questionIdx) {
       endTesting(chatId);
       return;
     }
