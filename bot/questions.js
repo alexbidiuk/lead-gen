@@ -4,7 +4,7 @@
 //        vars - Array of objects - The variants to be displayed like a keyboard:
 //            text - button text
 //            callback_data - the data to be received
-//                when user clicks on button ( example: '0_0' , the number before "_" - it's index of question(optional), after - question weight)
+//                when user clicks on button ( example: '0_0' , the number before "_" - it's index of answer, after - question weight)
 //        type - type of the questions (open or vars)
 //        userField - filed of user to modify
 
@@ -78,7 +78,7 @@ const questions = [
   {
     title:'Готовы ли вы признавать свои ошибки? \n \n' +
       '1. Да, если убедят меня, что я неправ \n' +
-      '2. Да, без лишних объяснений (легко)\n' +
+      '2. Да, без лишних объяснений (легко) \n' +
       '3. Нет, если я что-то решил, то только так и правильно \n' +
       '4. Готов, но мне это неприятно \n',
     vars: [
@@ -293,7 +293,7 @@ const questions = [
       '1. Страница на которую льется трафик \n' +
       '2. Страница на которой установлен Facebook Pixel \n' +
       '3. Страница благодарности - показывается после страницы на которую льется трафик \n' +
-      '4. Страница на которой, после проверки, Facebook Fixel Helper - горит зеленым цветом',
+      '4. Страница на которой, после проверки, Facebook Fixel Helper - горит зеленым цветом \n',
     vars: [
       [{ text: '1️⃣', callback_data: '1_0' },
       { text: '2️⃣', callback_data: '2_0' }],
@@ -302,7 +302,7 @@ const questions = [
     ],
     type: 'vars',
   },{
-    title:'Куда нужно установить код facebook pixel на странице? \n' +
+    title:'Куда нужно установить код facebook pixel на странице? \n \n' +
       '1. <head> \n' +
       '2. <body> \n' +
       '3. перед открывающимся тегом <head> \n' +
@@ -318,8 +318,8 @@ const questions = [
     title:'Настроем сплит-тест в Google Analytics. Тестируются 3 лендинга.\n' +
       'Сколько переходов с рекламы вы сделаете для того, чтобы точно определить, какой из лендингов работает лучше: \n \n' +
       '1. 300 переходов \n' +
-      '2. 1500 переходов \n ' +
-      '3. 3000 переходов \n ' +
+      '2. 1500 переходов \n' +
+      '3. 3000 переходов \n' +
       '4. 30000 переходов \n',
     vars: [
       [{ text: '1️⃣',  callback_data: '1_1' },
@@ -331,8 +331,8 @@ const questions = [
   },{
     title:'Сколько дней рекомендовано проводить сплит-тестирование лендингов? \n \n' +
       '1. 3 дня \n' +
-      '2. 5 дней \n ' +
-      '3. 7 дней \n ' +
+      '2. 5 дней \n' +
+      '3. 7 дней \n' +
       '4. 1 месяц \n',
     vars: [
       [{ text: '1️⃣', callback_data: '1_0' },
@@ -343,10 +343,10 @@ const questions = [
     type: 'vars',
   },{
     title:'Укажите несуществующую переменную в UTM - метках \n \n' +
-      '1. utm - source \n ' +
-      '2. utm-term \n ' +
-      '3. utm-content \n ' +
-      '4. utm-special \n ',
+      '1. utm - source \n' +
+      '2. utm-term \n' +
+      '3. utm-content \n' +
+      '4. utm-special \n',
     vars: [
       [{ text: '1️⃣', callback_data: '1_0' },
       { text: '2️⃣', callback_data: '2_0' }],
@@ -356,10 +356,10 @@ const questions = [
     type: 'vars',
   },{
     title:'Сколько utm меток может распознать Google Analytics? \n \n' +
-      '1. 3 \n ' +
-      '2. 4 \n ' +
-      '3. 5 \n ' +
-      '4. 6 \n ',
+      '1. 3 \n' +
+      '2. 4 \n' +
+      '3. 5 \n' +
+      '4. 6 \n',
     vars: [
       [{ text: '1️⃣', callback_data: '1_2' },
       { text: '2️⃣', callback_data: '2_3' }],
