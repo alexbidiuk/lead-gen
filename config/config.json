@@ -1,8 +1,0 @@
-{
-  "development": {
-    "telegramBotToken": "874855862:AAHraaJS1tkRtmYB-oLqh_uXni5hNWK3Er0"
-  },
-  "production": {
-    "telegramBotToken": "877260056:AAGHhdTWamlIKIjc4MsxguiIYds0HHAagfI"
-  }
-}

@@ -1,10 +1,6 @@
-const environment = process.env.NODE_ENV || 'development';
-
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
-
-const credentialsFileName = environment + '_credentials.json';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -36,11 +32,8 @@ const getNewToken = (oAuth2Client, callback) => {
 };
 
 const authorize = (callback) => {
-  fs.readFile(`${credentialsFileName}`, (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-
-    const credentials = JSON.parse(content);
-    const {client_secret, client_id, redirect_uris} = credentials.installed;
+  const credentials = JSON.parse(global.gConfig.googleSheetsCreds);
+  const {client_secret, client_id, redirect_uris} = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
@@ -50,8 +43,7 @@ const authorize = (callback) => {
       oAuth2Client.setCredentials(JSON.parse(token));
       callback(oAuth2Client);
     });
-  });
-}
+};
 
 
 module.exports = authorize;

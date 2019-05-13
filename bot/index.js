@@ -2,12 +2,9 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const questions = require('./questions');
 const users = require('./users');
-const initConfig = require('../config');
 const startGoogleWriteProcess = require('../google/spreadsheets');
 
 const startBot = () => {
-  initConfig();
-
   const token = global.gConfig.telegramBotToken;
   const bot = new TelegramBot(token, {polling: true});
 
@@ -45,6 +42,14 @@ const startBot = () => {
       })
   };
 
+  const formKeyboardOptions = (parseMode, inlineKeyboard, additionalProps) => ({
+    reply_markup: JSON.stringify({
+      inline_keyboard: inlineKeyboard ? inlineKeyboard : [],
+      parse_mode: parseMode,
+    }),
+    ...additionalProps
+  });
+
   const endTesting = (userId) => {
     users[userId].endTime = new Date().toUTCString();
     const total = calculateTotal(userId);
@@ -63,7 +68,7 @@ const startBot = () => {
   };
 
   const getFinalText = (total) => {
-    let text = "*РЕЗУЛЬТАТЫ ТЕСТА:* \n";
+    let text = "*РЕЗУЛЬТАТЫ ТЕСТА:* \n \n";
     if (0 <= total && total <= 49) {
       text = text + "*Все плохо.*\n" +
         "Ваши шансы получить работу или заказ крайне малы.\n \n" +
@@ -129,14 +134,7 @@ const startBot = () => {
       options = {};
     } else {
       let questionVars = questions[questionIndex].vars;
-      options = {
-        reply_markup: JSON.stringify({
-          inline_keyboard: questionVars,
-          parse_mode: 'Markdown',
-          one_time_keyboard: true,
-          resize_keyboard: true,
-        })
-      };
+      options = formKeyboardOptions('Markdown', questionVars, {});
     }
     bot.sendMessage(chatId, text, options);
   }

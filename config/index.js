@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
-// module variables
 const initConfig = () => {
-  const config = require('./config.json');
+// module variables
+  const config = require('./config.js');
   const defaultConfig = config.development;
   const environment = process.env.NODE_ENV || 'development';
   const environmentConfig = config[environment];
