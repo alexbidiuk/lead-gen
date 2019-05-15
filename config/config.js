@@ -1,5 +1,4 @@
 const secrets = require('../secrets.js');
-console.log(secrets.get('googlesheetcreds'));
 module.exports = {
   "development": {
     "telegramBotToken": secrets.get('botToken') || "874855862:AAHraaJS1tkRtmYB-oLqh_uXni5hNWK3Er0",

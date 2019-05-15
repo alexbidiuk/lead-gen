@@ -12,6 +12,3 @@ const initConfig = () => {
 
 module.exports = initConfig;
 
-
-
-
